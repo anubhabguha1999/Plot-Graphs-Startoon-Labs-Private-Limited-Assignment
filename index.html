@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphs</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Graphs</h1>
+        <form id="graphForm">
+            <div class="form-group">
+                <label for="inputValue">Input Value:</label>
+                <input type="number" class="form-control" id="inputValue" required>
+            </div>
+            <div class="form-group">
+                <label for="maxValue">Max Value:</label>
+                <input type="number" class="form-control" id="maxValue" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <div class="row">
+            <div class="col-md-4">
+                <canvas id="barGraph"></canvas>
+            </div>
+            <div class="col-md-4">
+                <canvas id="pieChart"></canvas>
+            </div>
+            <div class="col-md-4">
+                <canvas id="gradientBarGraph"></canvas>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById("graphForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+            const inputValue = parseFloat(document.getElementById("inputValue").value);
+            const maxValue = parseFloat(document.getElementById("maxValue").value);
+
+            if (inputValue > maxValue) {
+                alert("Error: Input Value cannot be greater than Max Value.");
+                return;
+            }
+
+            const inputPercentage = (inputValue / maxValue) * 100;
+            const remainingPercentage = 100 - inputPercentage;
+
+            const data = [
+                { label: "Input Value", value: inputPercentage },
+                { label: "Remaining", value: remainingPercentage },
+            ];
+
+            createBarGraph(data);
+            createPieChart(data);
+            createGradientBarGraph(data);
+        });
+
+        function createBarGraph(data) {
+            const ctx = document.getElementById("barGraph").getContext("2d");
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: data.map(d => d.label),
+                    datasets: [{
+                        data: data.map(d => d.value),
+                        backgroundColor: ["rgba(75, 192, 192, 0.2)", "rgba(255, 99, 132, 0.2)"],
+                        borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)"],
+                        borderWidth: 1,
+                    }],
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                        },
+                    },
+                },
+            });
+        }
+
+        function createPieChart(data) {
+            const ctx = document.getElementById("pieChart").getContext("2d");
+            new Chart(ctx, {
+                type: "pie",
+                data: {
+                    labels: data.map(d => d.label),
+                    datasets: [{
+                        data: data.map(d => d.value),
+                        backgroundColor: ["rgba(75, 192, 192, 0.2)", "rgba(255, 99, 132, 0.2)"],
+                        borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)"],
+                        borderWidth: 1,
+                    }],
+                },
+            });
+        }
+
+        function createGradientBarGraph(data) {
+            const ctx = document.getElementById("gradientBarGraph").getContext("2d");
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, "rgba(75, 192, 192, 0.2)");
+            gradient.addColorStop(1, "rgba(255, 99, 132, 0.2)");
+
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: data.map(d => d.label),
+                    datasets: [{
+                        data: data.map(d => d.value),
+                        backgroundColor: gradient,
+                        borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)"],
+                        borderWidth: 1,
+                    }],
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                        },
+                    },
+                },
+            });
+        }
+    </script>
+</body>
+</html>
+<!-- <!DOCTYPE html>
+<html>
+  <head>
+    <title>Graphs</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css"
+    />
+  </head>
+  <body>
+    <div>
+      <label for="input-value">Input Value:</label>
+      <input type="number" id="input-value" />
+    </div>
+    <div>
+      <label for="max-value">Max Value:</label>
+      <input type="number" id="max-value" />
+    </div>
+    <div>
+      <canvas id="graph1"></canvas>
+    </div>
+    <div>
+      <canvas id="graph2"></canvas>
+    </div>
+    <div>
+      <canvas id="graph3"></canvas>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    <script src="javascrript.js"></script>
+  </body>
+</html> -->
